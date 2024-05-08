@@ -10,6 +10,6 @@ export DENEB_FORK_VERSION=0x50000001
 
 go run . housekeeper \
   --network custom \
-  --db postgres://postgres:postgres@host.docker.internal:5432/postgres?sslmode=disable
+  --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable
 
 
