@@ -9,6 +9,4 @@ export DENEB_FORK_VERSION=0x50000001
 
 go run . website \
   --network custom \
-  --secret-key 0x607a11b45a7219cc61a3d9c5fd08c7eebd602a6a19a977f8d3771d5711a550f2 \
   --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable \
-  --beacon-uris http://116.202.172.145:5052
