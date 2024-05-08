@@ -14,6 +14,7 @@ services:
       --network custom
       --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable
       --beacon-uris http://116.202.172.145:5052
+      --redis-uri 95.217.233.186:6379
 
   api:
     build: .
