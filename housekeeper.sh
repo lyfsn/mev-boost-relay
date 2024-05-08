@@ -10,6 +10,7 @@ export DENEB_FORK_VERSION=0x50000001
 
 go run . housekeeper \
   --network custom \
-  --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable
+  --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable \
+  --beacon-uris http://116.202.172.145:5052
 
 
