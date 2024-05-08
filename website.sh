@@ -10,3 +10,4 @@ export DENEB_FORK_VERSION=0x50000001
 go run . website \
   --network custom \
   --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable \
+  --listen-addr 0.0.0.0:9060
