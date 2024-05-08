@@ -49,3 +49,4 @@ services:
       --network custom
       --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable
       --listen-addr 0.0.0.0:9060
+      --redis-uri 116.202.172.145:6379
