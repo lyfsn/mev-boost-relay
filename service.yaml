@@ -32,6 +32,7 @@ services:
       --db postgres://postgres:postgres@95.217.233.186:5432/postgres?sslmode=disable
       --beacon-uris http://116.202.172.145:5052
       --listen-addr 0.0.0.0:9062
+      --redis-uri 116.202.172.145:6379
 
   website:
     build: .
