@@ -1128,6 +1128,7 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 	})
 
 	if err != nil {
+		fmt.Println("---debug---11-", err)
 		handleError(log, http.StatusBadRequest, "error in traversing json")
 		return
 	}
