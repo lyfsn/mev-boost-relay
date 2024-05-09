@@ -941,6 +941,7 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 	req.Body.Close()
 
 	parseRegistration := func(value []byte) (reg *builderApiV1.SignedValidatorRegistration, err error) {
+
 		// Pubkey
 		_pubkey, err := jsonparser.GetUnsafeString(value, "message", "pubkey")
 		if err != nil {
@@ -1013,14 +1014,11 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		return reg, nil
 	}
 
-	fmt.Println("---debug---1", string(body))
 	// Iterate over the registrations
 	_, err = jsonparser.ArrayEach(body, func(value []byte, dataType jsonparser.ValueType, offset int, _err error) {
-		fmt.Println("---debug---2")
 
 		numRegTotal += 1
 		if processingStoppedByError {
-			fmt.Println("---debug---3")
 
 			return
 		}
@@ -1034,7 +1032,6 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		signedValidatorRegistration, err := parseRegistration(value)
 		if err != nil {
 			handleError(regLog, http.StatusBadRequest, err.Error())
-			fmt.Println("---debug---4")
 
 			return
 		}
@@ -1053,12 +1050,10 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		registrationTimestamp := signedValidatorRegistration.Message.Timestamp.Unix()
 		if registrationTimestamp < int64(api.genesisInfo.Data.GenesisTime) {
 			handleError(regLog, http.StatusBadRequest, "timestamp too early")
-			fmt.Println("---debug---5")
 
 			return
 		} else if registrationTimestamp > registrationTimestampUpperBound {
 			handleError(regLog, http.StatusBadRequest, "timestamp too far in the future")
-			fmt.Println("---debug---6")
 
 			return
 		}
@@ -1067,7 +1062,6 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		isKnownValidator := api.datastore.IsKnownValidator(pkHex)
 		if !isKnownValidator {
 			handleError(regLog, http.StatusBadRequest, fmt.Sprintf("not a known validator: %s", pkHex))
-			fmt.Println("---debug---7")
 
 			return
 		}
@@ -1075,12 +1069,10 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		// Check for a previous registration timestamp
 		prevTimestamp, err := api.redis.GetValidatorRegistrationTimestamp(pkHex)
 		if err != nil {
-			fmt.Println("---debug---8")
 
 			regLog.WithError(err).Error("error getting last registration timestamp")
 		} else if prevTimestamp >= uint64(signedValidatorRegistration.Message.Timestamp.Unix()) {
 			// abort if the current registration timestamp is older or equal to the last known one
-			fmt.Println("---debug---9")
 
 			return
 		}
@@ -1089,18 +1081,15 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		ok, err := ssz.VerifySignature(signedValidatorRegistration.Message, api.opts.EthNetDetails.DomainBuilder, signedValidatorRegistration.Message.Pubkey[:], signedValidatorRegistration.Signature[:])
 		if err != nil {
 			regLog.WithError(err).Error("error verifying registerValidator signature")
-			fmt.Println("---debug---10")
 
 			return
 		} else if !ok {
 			regLog.Info("invalid validator signature")
 			if api.ffRegValContinueOnInvalidSig {
-				fmt.Println("---debug---11")
 
 				return
 			} else {
 				handleError(regLog, http.StatusBadRequest, fmt.Sprintf("failed to verify validator signature for %s", signedValidatorRegistration.Message.Pubkey.String()))
-				fmt.Println("---debug---12")
 
 				return
 			}
@@ -1128,7 +1117,6 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 	})
 
 	if err != nil {
-		fmt.Println("---debug---11-", err)
 		handleError(log, http.StatusBadRequest, "error in traversing json")
 		return
 	}
