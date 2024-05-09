@@ -1013,7 +1013,7 @@ func (api *RelayAPI) handleRegisterValidator(w http.ResponseWriter, req *http.Re
 		return reg, nil
 	}
 
-	fmt.Println("---debug---1", body)
+	fmt.Println("---debug---1", parseRegistration)
 	// Iterate over the registrations
 	_, err = jsonparser.ArrayEach(body, func(value []byte, dataType jsonparser.ValueType, offset int, _err error) {
 		fmt.Println("---debug---2")
